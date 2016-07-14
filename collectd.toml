@@ -1,0 +1,6 @@
+[template]
+src = "collectd.tmpl"
+dest = "/etc/collectd/collectd.conf"
+owner = "root"
+mode = "0644"
+reload_cmd = "/usr/sbin/collectd -C /etc/collectd/collectd.conf -f"
