@@ -1,5 +1,7 @@
 {{$influxdb_host := getenv "INFLUXDB_HOST"}}
 {{$influxdb_port := getenv "INFLUXDB_PORT"}}
+{{$riemann_host := getenv "RIEMANN_HOST"}}
+{{$riemann_port := getenv "RIEMANN_PORT"}}
 #
 # Config file for collectd(1).
 # Please read collectd.conf(5) for a list of options.
@@ -145,7 +147,7 @@ LoadPlugin memory
 {{if $influxdb_host}}
 LoadPlugin network
 <Plugin "network">
-    Server "{{$influxdb_host}}" "{{$influxdb_port}}"
+  Server "{{$influxdb_host}}" "{{$influxdb_port}}"
 </Plugin>
 {{else}}
 #LoadPlugin network
@@ -210,7 +212,21 @@ LoadPlugin network
 #LoadPlugin write_log
 ##LoadPlugin write_mongodb
 #LoadPlugin write_redis
+{{if $riemann_host}}
+LoadPlugin write_riemann
+<Plugin "write_riemann">
+ <Node "riemann">
+   Host "{{$riemann_host}}"
+   Port "{{$riemann_port}}"
+   Protocol UDP
+   StoreRates true
+   AlwaysAppendDS false
+ </Node>
+ Tag "foobar"
+</Plugin>
+{{else}}
 #LoadPlugin write_riemann
+{{end}}
 #LoadPlugin write_tsdb
 ##LoadPlugin xmms
 #LoadPlugin zfs_arc

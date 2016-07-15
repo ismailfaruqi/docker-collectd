@@ -14,3 +14,5 @@ ADD collectd.toml /etc/confd/conf.d/collectd.toml
 
 ADD confd /usr/bin/confd
 RUN chmod +x /usr/bin/confd
+
+CMD ["/entrypoint.sh"]
